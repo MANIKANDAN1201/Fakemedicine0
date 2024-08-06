@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  final PageController _pageController = PageController();
 
   static List<Widget> _pages = <Widget>[
     BarcodeScannerScreen(),
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+    _pageController.jumpToPage(index); // Change page in PageView
   }
 
   @override
@@ -53,9 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text('Home'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
-                setState(() {
-                  _selectedIndex = 0; // Switch to Home page
-                });
+                _onItemTapped(0); // Switch to Home page
               },
             ),
             ListTile(
@@ -63,9 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text('Notifications'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
-                setState(() {
-                  _selectedIndex = 1; // Switch to Notifications page
-                });
+                _onItemTapped(1); // Switch to Notifications page
               },
             ),
             ListTile(
@@ -73,19 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text('Report'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
-                setState(() {
-                  _selectedIndex = 2; // Switch to Report page
-                });
+                _onItemTapped(2); // Switch to Report page
               },
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text('Profile'),
+              title: Text('Account'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
-                setState(() {
-                  _selectedIndex = 3; // Switch to Profile page
-                });
+                _onItemTapped(3); // Switch to Profile page
               },
             ),
             ListTile(
@@ -100,7 +94,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: _pages[_selectedIndex],
+      body: PageView(
+        controller: _pageController,
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showUnselectedLabels: true,

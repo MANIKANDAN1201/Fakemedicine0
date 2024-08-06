@@ -7,18 +7,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushReplacementNamed('/auth');
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -48,6 +36,14 @@ class ProfileScreen extends StatelessWidget {
                   },
                   icon: Icon(Icons.edit),
                   label: Text('Edit Profile'),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // Navigate to Edit Profile Screen
+                  },
+                  icon: Icon(Icons.person),
+                  label: Text('My profile'),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton.icon(
