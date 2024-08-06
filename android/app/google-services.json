@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "876495906268",
+    "project_id": "fakemedicine-3aca1",
+    "storage_bucket": "fakemedicine-3aca1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876495906268:android:d74f47c7b35a772787db19",
+        "android_client_info": {
+          "package_name": "com.example.fakemedicien"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyJuISAkBuAFbklCyEmE0yMxc4VHFYM0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
