@@ -29,6 +29,77 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Screen'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                setState(() {
+                  _selectedIndex = 0; // Switch to Home page
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.notifications),
+              title: Text('Notifications'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                setState(() {
+                  _selectedIndex = 1; // Switch to Notifications page
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.report),
+              title: Text('Report'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                setState(() {
+                  _selectedIndex = 2; // Switch to Report page
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                setState(() {
+                  _selectedIndex = 3; // Switch to Profile page
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                // Redirect to AuthScreen or handle logout
+                Navigator.pushReplacementNamed(context, '/auth');
+              },
+            ),
+          ],
+        ),
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
