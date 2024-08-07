@@ -3,8 +3,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'scan_result_screen.dart'; // Import the new screen
+import 'scan_result_screen.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({Key? key}) : super(key: key);
@@ -18,7 +17,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   String _scanResult = "";
   String _expiryDate = "";
   bool? _isFake;
-  TextEditingController _serialNumberController = TextEditingController();
 
   Future<void> _scanBarcode() async {
     try {
@@ -65,7 +63,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               _isFake! ? "This medicine is fake." : "This medicine is genuine.";
         });
 
-        // Navigate to the ScanResultScreen with the results
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -92,34 +89,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: Text('Barcode Scanner'),
+      ),
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Search bar
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Search for Medicine',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30), // Rounded corners
-                ),
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Serial number input
-            TextField(
-              controller: _serialNumberController,
-              decoration: InputDecoration(
-                labelText: 'Enter Serial Number',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30), // Rounded corners
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Barcode scanner button
             ElevatedButton(
               onPressed: _scanBarcode,
               child: Text('Scan Barcode'),
@@ -130,52 +106,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Display scanned barcode
             Text(
-              _barcode.isEmpty
-                  ? 'Awaiting scan or serial input...'
-                  : 'Scanned: $_barcode',
+              _barcode.isEmpty ? 'Awaiting scan...' : 'Scanned: $_barcode',
               style: TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 20),
-            // Feature cards
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildFeatureCard(
-                  icon: Icons.health_and_safety,
-                  label: 'Health Vitals',
-                  color: Colors.green,
-                ),
-                _buildFeatureCard(
-                  icon: Icons.featured_play_list,
-                  label: '',
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeatureCard(
-      {required IconData icon, required String label, required Color color}) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15), // Rounded corners
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.white),
-            SizedBox(height: 10),
-            Text(label, style: TextStyle(fontSize: 18, color: Colors.white)),
           ],
         ),
       ),
