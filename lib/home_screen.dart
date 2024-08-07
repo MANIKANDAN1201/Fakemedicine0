@@ -1,19 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'scan_result_screen.dart';
+import 'barcode_scanner_screen.dart';
 import 'notifications.dart';
 import 'report_screen.dart';
 import 'profile_screen.dart';
-import 'barcode_scanner_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -22,128 +14,57 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
-  String _barcode = "";
-  String _scanResult = "";
-  String _expiryDate = "";
-  bool? _isFake;
-  TextEditingController _serialNumberController = TextEditingController();
-
-  Future<void> _scanBarcode() async {
-    try {
-      final result = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666',
-        'Cancel',
-        true,
-        ScanMode.BARCODE,
-      );
-      if (result != '-1') {
-        setState(() {
-          _barcode = result;
-        });
-
-        await FirebaseFirestore.instance.collection('barcodes').add({
-          'barcode': _barcode,
-          'scannedAt': Timestamp.now(),
-        });
-
-        await _checkMedicine(_barcode);
-      }
-    } catch (e) {
-      setState(() {
-        _barcode = 'Error: $e';
-      });
-    }
-  }
-
-  Future<void> _checkMedicine(String barcode) async {
-    try {
-      final url = 'https://your-api-endpoint.com/check-medicine';
-      final response = await http.post(
-        Uri.parse(url),
-        body: jsonEncode({'barcode': barcode}),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _isFake = data['isFake'];
-          _expiryDate = "Expiry Date: ${data['expiryDate']}";
-          _scanResult =
-              _isFake! ? "This medicine is fake." : "This medicine is genuine.";
-        });
-
-        // Navigate to the ScanResultScreen with the results
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ScanResultScreen(
-              barcode: _barcode,
-              scanResult: _scanResult,
-              expiryDate: _expiryDate,
-              isFake: _isFake!,
-            ),
-          ),
-        );
-      } else {
-        setState(() {
-          _scanResult = "Failed to check medicine. Please try again.";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _scanResult = 'Error connecting to API: $e';
-      });
-    }
-  }
-
   static List<Widget> _pages = <Widget>[
     BarcodeScannerScreen(),
     NotificationsScreen(),
     ReportScreen(),
-    ProfileScreen(),
+    MyApp(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    _pageController.jumpToPage(index);
+    _pageController.jumpToPage(index); // Change page in PageView
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF43A047),
+        backgroundColor: Color(0xFF17395E), // Set background color to #17395E
+        iconTheme:
+            IconThemeData(color: Colors.white), // Change drawer icon to white
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.medical_services,
               size: 28,
-              color: Colors.white,
+              color: Colors.white, // Icon color set to white
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 8), // Space between the icon and the text
             Text(
               'MEDTRUST',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
-                color: Colors.white,
+                color: Colors.white, // Text color set to white
               ),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications,
+                color: Colors.white), // Icon color set to white
             onPressed: () {
               _onItemTapped(1);
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person,
+                color: Colors.white), // Icon color set to white
             onPressed: () {
               _onItemTapped(3);
             },
@@ -156,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF43A047),
+                color: Color(0xFF17395E), // Changed color to #17395E
               ),
               child: Text(
                 'Menu',
@@ -167,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
+              leading: Icon(Icons.home,
+                  color: Color(0xFF17395E)), // Icon color set to #17395E
               title: Text('Home'),
               onTap: () {
                 Navigator.pop(context);
@@ -175,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
+              leading: Icon(Icons.notifications,
+                  color: Color(0xFF17395E)), // Icon color set to #17395E
               title: Text('Notifications'),
               onTap: () {
                 Navigator.pop(context);
@@ -183,7 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.report),
+              leading: Icon(Icons.report,
+                  color: Color(0xFF17395E)), // Icon color set to #17395E
               title: Text('Report'),
               onTap: () {
                 Navigator.pop(context);
@@ -191,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.person,
+                  color: Color(0xFF17395E)), // Icon color set to #17395E
               title: Text('Account'),
               onTap: () {
                 Navigator.pop(context);
@@ -199,7 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: Icon(Icons.logout,
+                  color: Color(0xFF17395E)), // Icon color set to #17395E
               title: Text('Logout'),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
@@ -214,86 +140,32 @@ class _HomeScreenState extends State<HomeScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.grey],
+            colors: [Colors.grey, Colors.white], // Corrected gradient colors
           ),
         ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Search bar
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Search for Medicine',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded corners
-                  ),
-                  prefixIcon: Icon(Icons.search),
-                ),
-              ),
-              SizedBox(height: 20),
-              // Serial number input
-              TextField(
-                controller: _serialNumberController,
-                decoration: InputDecoration(
-                  labelText: 'Enter Serial Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded corners
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              // Barcode scanner button
-              ElevatedButton(
-                onPressed: _scanBarcode,
-                child: Text('Scan Barcode'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded corners
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              // Display scanned barcode
-              Text(
-                _barcode.isEmpty
-                    ? 'Awaiting scan or serial input...'
-                    : 'Scanned: $_barcode',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 20),
-              // Feature cards
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildFeatureCard(
-                    icon: Icons.health_and_safety,
-                    label: 'Health Vitals',
-                    color: Colors.green,
-                  ),
-                  _buildFeatureCard(
-                    icon: Icons.featured_play_list,
-                    label: 'Feature 2',
-                    color: Colors.blue,
-                  ),
-                ],
-              ),
-            ],
-          ),
+        child: PageView(
+          controller: _pageController,
+          children: _pages,
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Color(0xFF17395E), // Set BottomAppBar color to #17395E
         shape: CircularNotchedRectangle(),
         notchMargin: 8.0,
         child: Container(
-          height: 50.0,
+          height: 45.0, // Reduced height
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildNavItem(Icons.home, 'Home', 0),
               _buildNavItem(Icons.notifications, 'Notifications', 1),
-              const SizedBox(width: 50), // Space for floating action button
+              const SizedBox(
+                  width: 30), // Reduced gap for the floating action button
               _buildNavItem(Icons.report, 'Report', 2),
               _buildNavItem(Icons.person, 'Profile', 3),
             ],
@@ -302,17 +174,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
-        width: 60,
-        height: 60,
+        width: 60, // Adjusted width
+        height: 60, // Adjusted height
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
               _onItemTapped(0); // Redirect to Barcode Scanner Page
             },
-            child: Icon(Icons.qr_code_scanner_rounded, size: 30),
-            backgroundColor: Color(0xFF43A047),
+            child: Icon(Icons.qr_code_scanner_rounded,
+                size: 30, color: Colors.white), // Icon color set to white
+            backgroundColor: Color(0xFF17395E), // Changed color to #17395E
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(30), // Make the icon round
             ),
             elevation: 8.0,
           ),
@@ -331,37 +204,15 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Icon(
             icon,
-            color: isSelected ? Color(0xFF43A047) : Colors.black,
+            color: Colors.white, // Icon color set to white
           ),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? Color(0xFF43A047) : Colors.black,
+              color: Colors.white, // Text color set to white
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFeatureCard(
-      {required IconData icon, required String label, required Color color}) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15), // Rounded corners
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.white),
-            SizedBox(height: 10),
-            Text(label, style: TextStyle(fontSize: 18, color: Colors.white)),
-          ],
-        ),
       ),
     );
   }
