@@ -4,10 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'home_screen.dart';
-import 'notifications.dart';
-import 'report_screen.dart';
-import 'profile_screen.dart';
+import 'scan_result_screen.dart'; // Import the new screen
 
 class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({Key? key}) : super(key: key);
@@ -67,6 +64,19 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           _scanResult =
               _isFake! ? "This medicine is fake." : "This medicine is genuine.";
         });
+
+        // Navigate to the ScanResultScreen with the results
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScanResultScreen(
+              barcode: _barcode,
+              scanResult: _scanResult,
+              expiryDate: _expiryDate,
+              isFake: _isFake!,
+            ),
+          ),
+        );
       } else {
         setState(() {
           _scanResult = "Failed to check medicine. Please try again.";
@@ -82,10 +92,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Barcode Scanner'),
-      ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,19 +101,20 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Search for Medicine',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30), // Rounded corners
+                ),
                 prefixIcon: Icon(Icons.search),
               ),
             ),
             SizedBox(height: 20),
             // Serial number input
-            Container(
-              width: double.infinity,
-              child: TextField(
-                controller: _serialNumberController,
-                decoration: InputDecoration(
-                  labelText: 'Enter Serial Number',
-                  border: OutlineInputBorder(),
+            TextField(
+              controller: _serialNumberController,
+              decoration: InputDecoration(
+                labelText: 'Enter Serial Number',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30), // Rounded corners
                 ),
               ),
             ),
@@ -115,9 +123,14 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             ElevatedButton(
               onPressed: _scanBarcode,
               child: Text('Scan Barcode'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30), // Rounded corners
+                ),
+              ),
             ),
             SizedBox(height: 20),
-            // Display scanned barcode or serial number
+            // Display scanned barcode
             Text(
               _barcode.isEmpty
                   ? 'Awaiting scan or serial input...'
@@ -125,21 +138,44 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),
-            // Display scan result
-            Text(
-              _scanResult.isEmpty ? 'Awaiting result...' : _scanResult,
-              style: TextStyle(
-                fontSize: 20,
-                color: _isFake == true ? Colors.red : Colors.green,
-              ),
+            // Feature cards
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildFeatureCard(
+                  icon: Icons.health_and_safety,
+                  label: 'Health Vitals',
+                  color: Colors.green,
+                ),
+                _buildFeatureCard(
+                  icon: Icons.featured_play_list,
+                  label: '',
+                  color: Colors.blue,
+                ),
+              ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard(
+      {required IconData icon, required String label, required Color color}) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(15), // Rounded corners
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: Colors.white),
             SizedBox(height: 10),
-            // Display expiry date if available
-            if (_expiryDate.isNotEmpty)
-              Text(
-                _expiryDate,
-                style: TextStyle(fontSize: 18),
-              ),
+            Text(label, style: TextStyle(fontSize: 18, color: Colors.white)),
           ],
         ),
       ),

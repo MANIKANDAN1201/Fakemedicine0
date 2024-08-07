@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'myprofile.dart';
 
 class ProfileScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
@@ -40,7 +41,12 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Navigate to Edit Profile Screen
+                    // Navigate to MyProfileScreen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyProfileScreen()),
+                    );
                   },
                   icon: Icon(Icons.person),
                   label: Text('My profile'),
