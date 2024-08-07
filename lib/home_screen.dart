@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'barcode_scanner_screen.dart';
 import 'notifications.dart';
 import 'report_screen.dart';
 import 'profile_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'medicine_details_page.dart'; // Add this import
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,12 +14,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
+  final TextEditingController _serialNumberController = TextEditingController();
+  String _barcode = "";
 
   static List<Widget> _pages = <Widget>[
-    BarcodeScannerScreen(),
+    HomeScreen(),
     NotificationsScreen(),
     ReportScreen(),
-    MyApp(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -26,6 +29,59 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
     _pageController.jumpToPage(index); // Change page in PageView
+
+    // Handle navigation based on the selected index
+    switch (index) {
+      case 0:
+        // Navigate to Barcode Scanner Page if not already there
+        if (_pageController.page != 0) {
+          _pageController.jumpToPage(0);
+        }
+        break;
+      case 1:
+        // Navigate to Notifications Page if not already there
+        if (_pageController.page != 1) {
+          _pageController.jumpToPage(1);
+        }
+        break;
+      case 2:
+        // Navigate to Report Page if not already there
+        if (_pageController.page != 2) {
+          _pageController.jumpToPage(2);
+        }
+        break;
+      case 3:
+        // Navigate to Profile Page within the PageView
+        _pageController.jumpToPage(3);
+        break;
+    }
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    final bool isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            icon,
+            color: isSelected
+                ? Colors.amber
+                : Colors.white, // Change color based on selection
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? Colors.amber
+                  : Colors.white, // Change color based on selection
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -145,7 +201,97 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: PageView(
           controller: _pageController,
-          children: _pages,
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Search bar
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Search for Medicine',
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded corners
+                      ),
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    onSubmitted: (value) {
+                      if (value.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MedicineDetailsPage(medicineName: value),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  // Serial number input
+                  TextField(
+                    controller: _serialNumberController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Serial Number',
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded corners
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Barcode scanner button
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BarcodeScannerScreen(),
+                        ),
+                      );
+                    },
+                    child: Text('Scan Barcode'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded corners
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Display scanned barcode
+                  Text(
+                    _barcode.isEmpty
+                        ? 'Awaiting scan or serial input...'
+                        : 'Scanned: $_barcode',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(height: 20),
+                  // Feature cards
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildFeatureCard(
+                        icon: Icons.health_and_safety,
+                        label: 'Health Vitals',
+                        color: Colors.green,
+                      ),
+                      _buildFeatureCard(
+                        icon: Icons.featured_play_list,
+                        label: 'Feature 2',
+                        color: Colors.blue,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            NotificationsScreen(),
+            ReportScreen(),
+            ProfileScreen(), // Ensure ProfileScreen is part of the PageView
+          ],
           onPageChanged: (index) {
             setState(() {
               _selectedIndex = index;
@@ -173,46 +319,39 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        width: 60, // Adjusted width
-        height: 60, // Adjusted height
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {
-              _onItemTapped(0); // Redirect to Barcode Scanner Page
-            },
-            child: Icon(Icons.qr_code_scanner_rounded,
-                size: 30, color: Colors.white), // Icon color set to white
-            backgroundColor: Color(0xFF17395E), // Changed color to #17395E
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30), // Make the icon round
-            ),
-            elevation: 8.0,
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
+        onPressed: () {
+// Add your onPressed code here!
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+        elevation: 2.0,
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    final bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            icon,
-            color: Colors.white, // Icon color set to white
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white, // Text color set to white
+  Widget _buildFeatureCard(
+      {required IconData icon, required String label, required Color color}) {
+    return Card(
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(icon, size: 36, color: Colors.white),
+            SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
