@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'myprofile.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -9,8 +10,8 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: Color(0xFF17395E),
+        title: const Text('Profile'),
+        backgroundColor: const Color(0xFF17395E),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -19,50 +20,72 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(
-                      user?.photoURL ?? 'https://via.placeholder.com/150'),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  user?.displayName ?? 'User Name',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  user?.email ?? 'user@example.com',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Navigate to Edit Profile Screen
+                FutureBuilder<DocumentSnapshot>(
+                  future: _fetchUserProfile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return const Text('Error loading user data');
+                    } else if (snapshot.hasData && snapshot.data!.exists) {
+                      final Map<String, dynamic> userData =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      final String? profileImageUrl = userData['profileImage'];
+
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: profileImageUrl != null &&
+                                    profileImageUrl.isNotEmpty
+                                ? NetworkImage(profileImageUrl)
+                                : const AssetImage('assets/images/user.JPG')
+                                    as ImageProvider,
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            userData['name'] ??
+                                user?.displayName ??
+                                'User Name',
+                            style: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            userData['email'] ??
+                                user?.email ??
+                                'user@example.com',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Text('No user data found');
+                    }
                   },
-                  icon: Icon(Icons.edit),
-                  label: Text('Edit Profile'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
                     // Navigate to MyProfileScreen
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyProfileScreen()),
+                          builder: (context) => const MyProfileScreen()),
                     );
                   },
-                  icon: Icon(Icons.person),
-                  label: Text('My profile'),
+                  icon: const Icon(Icons.person),
+                  label: const Text('My profile'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton.icon(
                   onPressed: () {
                     FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushReplacementNamed('/auth');
                   },
-                  icon: Icon(Icons.logout),
-                  label: Text('Logout'),
+                  icon: const Icon(Icons.logout),
+                  label: const Text('Logout'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
@@ -73,5 +96,17 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<DocumentSnapshot> _fetchUserProfile() async {
+    final String? uid = user?.uid;
+    if (uid != null) {
+      return await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+    } else {
+      throw Exception("User not logged in");
+    }
   }
 }

@@ -4,7 +4,9 @@ import 'barcode_scanner_screen.dart';
 import 'notifications.dart';
 import 'report_screen.dart';
 import 'profile_screen.dart';
-import 'medicine_details_page.dart'; // Add this import
+import 'medicine_details_page.dart';
+import 'health_vitals_screen.dart';
+import 'health.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   final TextEditingController _serialNumberController = TextEditingController();
   String _barcode = "";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static List<Widget> _pages = <Widget>[
     HomeScreen(),
@@ -67,16 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Icon(
             icon,
-            color: isSelected
-                ? Colors.amber
-                : Colors.white, // Change color based on selection
+            color:
+                isSelected ? Colors.white : Colors.black, // Change icon color
+            size: 24.0,
           ),
           Text(
             label,
             style: TextStyle(
-              color: isSelected
-                  ? Colors.amber
-                  : Colors.white, // Change color based on selection
+              color:
+                  isSelected ? Colors.white : Colors.black, // Change text color
+              fontSize: 12.0,
             ),
           ),
         ],
@@ -87,6 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Inside the Scaffold of HomeScreen
+
       appBar: AppBar(
         backgroundColor: Color(0xFF17395E), // Set background color to #17395E
         iconTheme:
@@ -230,21 +235,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   SizedBox(height: 20),
-                  // Serial number input
-                  TextField(
-                    controller: _serialNumberController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter Serial Number',
-                      border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Rounded corners
-                      ),
+
+                  // Serial number input horizontal card
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF3B4351), // Background color of the card
+                      borderRadius: BorderRadius.circular(
+                          15), // Rounded corners for the card
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _serialNumberController,
+                            decoration: InputDecoration(
+                              labelText: 'Enter Serial Number',
+                              labelStyle: TextStyle(
+                                  color: Colors.white), // Label text color
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    30), // Rounded corners
+                                borderSide: BorderSide.none, // No border line
+                              ),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(
+                                  0.1), // Light background for text field
+                            ),
+                            style: TextStyle(
+                                color: Colors.white), // Input text color
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   SizedBox(height: 20),
-                  // Barcode scanner button
-                  ElevatedButton(
-                    onPressed: () {
+
+                  InkWell(
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -252,16 +281,36 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     },
-                    child: Text('Scan Barcode'),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Rounded corners
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          20), // Adjust the radius for the curve
+                      child: Image.asset(
+                        'assets/scan.png',
+                        fit: BoxFit
+                            .contain, // Ensures image covers available space
+                        width:
+                            10, // Stretches the image to the width of the page
+                        height:
+                            170, // Set a specific height or adjust as needed
                       ),
                     ),
                   ),
+
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.asset(
+                        'assets/vitals.png',
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                        height: 200,
+                      ),
+                    ),
+                  ),
+
                   SizedBox(height: 20),
-                  // Display scanned barcode
+
                   Text(
                     _barcode.isEmpty
                         ? 'Awaiting scan or serial input...'
@@ -269,19 +318,54 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 20),
+
                   // Feature cards
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildFeatureCard(
-                        icon: Icons.health_and_safety,
-                        label: 'Health Vitals',
-                        color: Colors.green,
+                      // Health Vitals horizontal card
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HealthVitalsScreen()),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(Icons.health_and_safety,
+                                    size: 36, color: Colors.white),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Health Vitals',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      _buildFeatureCard(
-                        icon: Icons.featured_play_list,
-                        label: 'Feature 2',
-                        color: Colors.blue,
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: _buildFeatureCard(
+                          icon: Icons.featured_play_list,
+                          label: 'Feature 2',
+                          color: Colors.blue,
+                          onTap: () {
+                            // Implement navigation for Feature 2
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -320,39 +404,54 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.amber,
+        backgroundColor: Color(0xFF17395E),
         onPressed: () {
-// Add your onPressed code here!
+          // Add your onPressed code here!
         },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.qr_code,
+          color: Colors.white, // Sets the icon color to white
+        ),
         elevation: 2.0,
+        shape: CircleBorder(), // Ensures the button is perfectly round
       ),
     );
   }
 
-  Widget _buildFeatureCard(
-      {required IconData icon, required String label, required Color color}) {
-    return Card(
-      color: color,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(icon, size: 36, color: Colors.white),
-            SizedBox(height: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+  Widget _buildFeatureCard({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        color: color,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(icon, size: 36, color: Colors.white),
+              SizedBox(height: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+void main() => runApp(MaterialApp(
+      home: HomeScreen(),
+    ));
