@@ -19,6 +19,8 @@ dependencies:
   googleapis_auth: ^1.6.0
   barcode_scan2: ^4.3.3
   image_picker: ^1.1.2
+  shared_preferences: ^2.2.3
+  firebase_storage: ^11.7.7
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +32,11 @@ flutter:
 
   assets:
     - fonts/Urbanist-SemiBold.ttf
+    - assets/vitals.png
+    - assets/scan.png
+    - assets/medicines.json
+    - assets/images/gopal.png
+    - assets/images/image1.png
 
   fonts:
     - family: Urbanist

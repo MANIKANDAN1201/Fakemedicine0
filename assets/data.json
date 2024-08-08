@@ -1,0 +1,338 @@
+[
+  {
+    "Medicine Name": "Chymoral Forte",
+    "Barcode No.": "8901610000000",
+    "Batch No.": "B12345",
+    "Purpose": "Pain relief",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Combiflam",
+    "Barcode No.": "8901080000000",
+    "Batch No.": "B12346",
+    "Purpose": "Pain relief and Fever",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Jardiance",
+    "Barcode No.": "4048850000000",
+    "Batch No.": "B12347",
+    "Purpose": "Nausea, Frequent urge to urinate, Increased thirst, Urinary tract infection, Hypoglycemia (low blood glucose level)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Clavam 625",
+    "Barcode No.": "8902270000000",
+    "Batch No.": "B12348",
+    "Purpose": "Bacterial infections",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Cefix 200",
+    "Barcode No.": "8901110000000",
+    "Batch No.": "B12349",
+    "Purpose": "Bacterial infections",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Cyclopam",
+    "Barcode No.": "8906020000000",
+    "Batch No.": "B12350",
+    "Purpose": "Abdominal pain",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Augmentin 625",
+    "Barcode No.": "8901150000000",
+    "Batch No.": "B12351",
+    "Purpose": "Vomiting, Nausea, Diarrhea",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Allegra 120mg",
+    "Barcode No.": "8901080000000",
+    "Batch No.": "B12352",
+    "Purpose": "Allergic skin conditions",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Aciloc 150",
+    "Barcode No.": "8901250000000",
+    "Batch No.": "B12353",
+    "Purpose": "Heartburn, Gastroesophageal reflux disease (Acid reflux)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Arkamin",
+    "Barcode No.": "8901250000000",
+    "Batch No.": "B12354",
+    "Purpose": "Hypertension (high blood pressure)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Allegra 180mg",
+    "Barcode No.": "8901080000000",
+    "Batch No.": "B12355",
+    "Purpose": "Allergic conditions",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Arkamin",
+    "Barcode No.": "8901320000000",
+    "Batch No.": "B12356",
+    "Purpose": "Hypertension (high blood pressure)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Aciloc RD",
+    "Barcode No.": "8904190000000",
+    "Batch No.": "B12357",
+    "Purpose": "Gastroesophageal reflux disease (Acid reflux)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Almox 500",
+    "Barcode No.": "8902270000000",
+    "Batch No.": "B12358",
+    "Purpose": "Bacterial infections",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Brufen 400",
+    "Barcode No.": "5060010000000",
+    "Batch No.": "B12359",
+    "Purpose": "Pain relief and Fever",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Brilinta 90mg",
+    "Barcode No.": "5000460000000",
+    "Batch No.": "B12360",
+    "Purpose": "Prevention of heart attack and stroke",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Betaloc 25mg",
+    "Barcode No.": "8902250000000",
+    "Batch No.": "B12361",
+    "Purpose": "Hypertension (high blood pressure), Angina (heart-related chest pain), Arrhythmia, Heart attack, Migraine",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Kenacort 4mg",
+    "Barcode No.": "8901120000000",
+    "Batch No.": "B12362",
+    "Purpose": "Osteoarthritis, Rheumatoid arthritis, Severe allergic reactions",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Kcor 5",
+    "Barcode No.": "834339000000",
+    "Batch No.": "B12363",
+    "Purpose": "Angina (heart-related chest pain)",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Hetrazan 100",
+    "Barcode No.": "6091400000000",
+    "Batch No.": "B12364",
+    "Purpose": "Filariasis",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Headset",
+    "Barcode No.": "8714500000000",
+    "Batch No.": "B12365",
+    "Purpose": "Migraine",
+    "Original": true
+  },
+  {
+    "Medicine Name": "HP Kit",
+    "Barcode No.": "8904160000000",
+    "Batch No.": "B12366",
+    "Purpose": "Peptic ulcer disease",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Hepamerz",
+    "Barcode No.": "8906020000000",
+    "Batch No.": "B12367",
+    "Purpose": "Indigestion",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Histafreem",
+    "Barcode No.": "8901070000000",
+    "Batch No.": "B12368",
+    "Purpose": "Sneezing and runny nose due to allergies",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Hyocimaxs",
+    "Barcode No.": "8907660000000",
+    "Batch No.": "B12369",
+    "Purpose": "Pain relief, Irritable bowel syndrome",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Heptral",
+    "Barcode No.": "8906020000000",
+    "Batch No.": "B12370",
+    "Purpose": "Liver disease",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Hyponat O 15",
+    "Barcode No.": "8904190000000",
+    "Batch No.": "B12371",
+    "Purpose": "Low levels of sodium in the blood",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Hifenac",
+    "Barcode No.": "8904190000000",
+    "Batch No.": "B12372",
+    "Purpose": "Pain relief",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Histafree",
+    "Barcode No.": "8901300000000",
+    "Batch No.": "B12373",
+    "Purpose": "Allergic skin conditions",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Histafree 120",
+    "Barcode No.": "8901300000000",
+    "Batch No.": "B12374",
+    "Purpose": "Allergic skin conditions",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Ecosprin 75",
+    "Barcode No.": "8904190000000",
+    "Batch No.": "B12375",
+    "Purpose": "Prevention of heart attack and stroke",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Enzoflam",
+    "Barcode No.": "8902270000000",
+    "Batch No.": "B12376",
+    "Purpose": "Pain relief",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Eoshine MR",
+    "Barcode No.": "8904190000000",
+    "Batch No.": "B12377",
+    "Purpose": "Pain due to muscle spasm",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Eliquis 2.5mg",
+    "Barcode No.": "8904040000000",
+    "Batch No.": "B12378",
+    "Purpose": "Treatment and prevention of blood clots",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Ecosprin Gold",
+    "Barcode No.": "8901300000000",
+    "Batch No.": "B12379",
+    "Purpose": "Heart attack",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Eliquis 5mg",
+    "Barcode No.": "8904040000000",
+    "Batch No.": "B12380",
+    "Purpose": "Treatment and prevention of blood clots",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Ibset",
+    "Barcode No.": "0",
+    "Batch No.": "B12381",
+    "Purpose": "Nausea, Vomiting",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Itmac 200",
+    "Barcode No.": "0",
+    "Batch No.": "B12382",
+    "Purpose": "Fungal infections",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Inapure 5",
+    "Barcode No.": "0",
+    "Batch No.": "B12383",
+    "Purpose": "Angina (heart-related chest pain), Heart failure",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Idrofos 150",
+    "Barcode No.": "0",
+    "Batch No.": "B12384",
+    "Purpose": "Osteoporosis",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Istavel",
+    "Barcode No.": "8908000000000",
+    "Batch No.": "B12385",
+    "Purpose": "Type 2 diabetes mellitus",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Jointace DN",
+    "Barcode No.": "0",
+    "Batch No.": "B12386",
+    "Purpose": "Osteoarthritis",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Jardiance",
+    "Barcode No.": "0",
+    "Batch No.": "B12387",
+    "Purpose": "Type 2 diabetes mellitus",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Jardiances",
+    "Barcode No.": "0",
+    "Batch No.": "B12388",
+    "Purpose": "Type 2 diabetes mellitus",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Isolazine Tablet",
+    "Barcode No.": "0",
+    "Batch No.": "B12389",
+    "Purpose": "",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Muzika",
+    "Barcode No.": "0",
+    "Batch No.": "B12390",
+    "Purpose": "Treatment of heart failure",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Becozinc",
+    "Barcode No.": "8901150000000",
+    "Batch No.": "B12391",
+    "Purpose": "Daily consumption of vitamin C, especially recommended for COVID time",
+    "Original": true
+  },
+  {
+    "Medicine Name": "Becozing",
+    "Barcode No.": "8901150000000",
+    "Batch No.": "B12392",
+    "Purpose": "Daily consumption of vitamin C, especially recommended for COVID time",
+    "Original": true
+  }
+]

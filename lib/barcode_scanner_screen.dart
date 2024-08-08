@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'scan_result_screen.dart'; // Import the result screen
-import 'medicine_details_page.dart'; // Import the medicine details page if needed
 
 class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({Key? key}) : super(key: key);
@@ -19,6 +19,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   String _scanResult = "";
   String _expiryDate = "";
   bool? _isFake;
+  String _medicineName = "";
+  String _manufacturerName = ""; // Updated from _batchNumber
 
   Future<void> _scanBarcode() async {
     try {
@@ -50,43 +52,96 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   Future<void> _checkMedicine(String barcode) async {
     try {
       final url =
-          'https://your-api-endpoint.com/check-medicine'; // Replace with your API endpoint
-      final response = await http.post(
-        Uri.parse(url),
-        body: jsonEncode({'barcode': barcode}),
-        headers: {'Content-Type': 'application/json'},
-      );
+          'https://api.upcitemdb.com/prod/trial/lookup?upc=$barcode'; // API URL with the scanned barcode
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        setState(() {
-          _isFake = data['isFake'];
-          _expiryDate = "Expiry Date: ${data['expiryDate']}";
-          _scanResult =
-              _isFake! ? "This medicine is fake." : "This medicine is genuine.";
-        });
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ScanResultScreen(
-              barcode: _barcode,
-              scanResult: _scanResult,
-              expiryDate: _expiryDate,
-              isFake: _isFake!,
-            ),
-          ),
-        );
+        if (data['items'] != null && data['items'].isNotEmpty) {
+          final product = data['items'][0];
+          setState(() {
+            _medicineName = product['title'] ?? "Unknown"; // Product title
+            _manufacturerName =
+                product['brand'] ?? "Unknown"; // Brand or any relevant field
+            _expiryDate =
+                "Not Available"; // Expiry date might not be available in the API
+            _isFake = false; // Assuming the product is genuine if found
+            _scanResult = "This medicine is genuine.";
+
+            _navigateToResultScreen();
+          });
+        } else {
+          // If product not found in API, check the local JSON file
+          await _checkMedicineInJson(barcode);
+        }
       } else {
         setState(() {
           _scanResult = "Failed to check medicine. Please try again.";
+          _navigateToResultScreen();
         });
       }
     } catch (e) {
       setState(() {
         _scanResult = 'Error connecting to API: $e';
+        _navigateToResultScreen();
       });
     }
+  }
+
+  Future<void> _checkMedicineInJson(String barcode) async {
+    try {
+      // Load the JSON file
+      final String jsonString =
+          await rootBundle.loadString('assets/medicines.json');
+      final List<dynamic> jsonData = jsonDecode(jsonString);
+
+      // Search for the barcode in the JSON data
+      final product = jsonData.firstWhere(
+        (item) => item['Barcode_No'] == barcode,
+        orElse: () => null,
+      );
+
+      if (product != null) {
+        setState(() {
+          _medicineName = product['Name'] ?? "Unknown";
+          _manufacturerName =
+              product['Manufacturer'] ?? "Unknown"; // Updated to manufacturer
+          _expiryDate = product['Expiry_Date'] ?? "Not Available";
+          _isFake = false; // Assuming the product is genuine if found in JSON
+          _scanResult = "This medicine is genuine.";
+        });
+      } else {
+        setState(() {
+          _scanResult = "Medicine not found. It might be fake.";
+          _isFake = true;
+        });
+      }
+
+      _navigateToResultScreen();
+    } catch (e) {
+      setState(() {
+        _scanResult = 'Error reading JSON data: $e';
+        _navigateToResultScreen();
+      });
+    }
+  }
+
+  void _navigateToResultScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ScanResultScreen(
+          barcode: _barcode,
+          scanResult: _scanResult,
+          expiryDate: _expiryDate,
+          isFake: _isFake!,
+          medicineName: _medicineName,
+          manufacturerName:
+              _manufacturerName, // Updated to match the new naming
+        ),
+      ),
+    );
   }
 
   @override
